@@ -31,7 +31,6 @@
     "common.entity.SlimeMixin",
     "common.entity.SwetMixin",
     "common.entity.ValkQueenMixin",
-    "common.inventory.LoreInventoryMixin",
     "common.item.DiggerItemMixin",
     "common.item.GlowingSporesItemMixin",
     "common.item.GummySwetItemMixin",

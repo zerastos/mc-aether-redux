@@ -35,7 +35,8 @@ public class ReduxPacketHandler {
         //register(InfuseItemPacket.class, InfuseItemPacket::decode);
         index++; // Packet discriminator intentionally unused. ^
         register(VampireAmuletSyncPacket.class, VampireAmuletSyncPacket::decode);
-        register(LoreUnlockPacket.class, LoreUnlockPacket::decode);
+        //register(LoreUnlockPacket.class, LoreUnlockPacket::decode);
+        index++; // Packet discriminator intentionally unused. ^
         register(SyncAetherGrassesPacket.class, SyncAetherGrassesPacket::decode);
         register(BlightshadeParticlePacket.class, BlightshadeParticlePacket::decode);
     }

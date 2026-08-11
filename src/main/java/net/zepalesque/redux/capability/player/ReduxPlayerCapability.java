@@ -26,7 +26,6 @@ public class ReduxPlayerCapability implements ReduxPlayer {
         return this.synchableFunctions;
     }
 
-    private final LoreBookModule lore;
     private final BlightshadeModule blightshade;
     private final AdrenalineModule adrenaline;
 
@@ -45,7 +44,6 @@ public class ReduxPlayerCapability implements ReduxPlayer {
 
     public ReduxPlayerCapability(Player pPlayer) {
         this.player = pPlayer;
-        this.lore = new LoreBookModule();
         this.blightshade = new BlightshadeModule(pPlayer);
         this.adrenaline = new AdrenalineModule(pPlayer);
     }
@@ -94,11 +92,6 @@ public class ReduxPlayerCapability implements ReduxPlayer {
     @Override
     public int ticksInAir() {
         return ticksInAir;
-    }
-
-    @Override
-    public LoreBookModule getLoreModule() {
-        return this.lore;
     }
 
     @Override
@@ -198,7 +191,6 @@ public class ReduxPlayerCapability implements ReduxPlayer {
         tag.putInt("max_jumps", this.maxAirJumps);
         tag.putInt("jumps", this.airJumps);
         tag.putInt("ticks_in_air", this.ticksInAir);
-        tag.put("lore_module", this.lore.serializeNBT());
         tag.put("blightshade_module", this.blightshade.serializeNBT());
         return tag;
     }
@@ -208,7 +200,6 @@ public class ReduxPlayerCapability implements ReduxPlayer {
         this.maxAirJumps = nbt.getInt("max_jumps");
         this.airJumps = nbt.getInt("jumps");
         this.ticksInAir = nbt.getInt("ticks_in_air");
-        this.lore.deserializeNBT(nbt.get("lore_module"));
         this.blightshade.deserializeNBT(nbt.get("blightshade_module"));
     }
 

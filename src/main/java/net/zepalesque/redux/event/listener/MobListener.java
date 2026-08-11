@@ -49,21 +49,6 @@ public class MobListener {
         }
     }
 
-    @SubscribeEvent
-    public static void onKill(LivingDeathEvent event) {
-        @Nullable Player plr = null;
-        if (event.getSource().getEntity() instanceof Player ent) {
-            plr = ent;
-        }
-        if (event.getSource().getDirectEntity() instanceof Player dir) {
-            plr = dir;
-        }
-        if (plr != null) {
-            EntityType<?> type = event.getEntity().getType();
-            ReduxPlayer.get(plr).ifPresent(reduxPlayer -> reduxPlayer.getLoreModule().incrementEntity(type));
-        }
-    }
-
 
 
     @SubscribeEvent
@@ -73,13 +58,6 @@ public class MobListener {
         if (entity instanceof Swet swet) {
             SwetHooks.swetTick(swet);
         }
-        double d0 = Math.abs(entity.getX() - entity.xOld);
-        double d1 = Math.abs(entity.getZ() - entity.zOld);
-        if ((d0 >= (double)0.003F || d1 >= (double)0.003F) && entity instanceof Player player && !player.level().isClientSide()) {
-            Optional<ResourceKey<Biome>> b = player.level().getBiome(player.blockPosition()).unwrapKey();
-            b.ifPresent(biomeResourceKey -> ReduxPlayer.get(player).ifPresent(reduxPlayer -> reduxPlayer.getLoreModule().incrementBiome(biomeResourceKey.location())));
-        }
-
     }
 
     @SubscribeEvent
