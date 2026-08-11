@@ -84,10 +84,10 @@ public class VampireAmuletCapability implements VampireAmulet {
                 this.timer--;
             }
             if (this.hasCurio && this.timer <= 0 && !this.canUseAbility()) {
-                this.setSynched(Direction.CLIENT, "ability_enabled", true);
+                this.syncAbilityUse(true);
             }
             if ((!this.hasCurio || this.timer > 0) && this.canUseAbility()) {
-                this.setSynched(Direction.CLIENT, "ability_enabled", false);
+                this.syncAbilityUse(false);
             }
         }
     }
@@ -117,5 +117,13 @@ public class VampireAmuletCapability implements VampireAmulet {
         this.active = nbt.getBoolean("active");
         this.timer = nbt.getInt("timer");
         this.hasCurio = nbt.getBoolean("has_curio");
+    }
+
+    private void syncAbilityUse(boolean active) {
+        ReduxPacketHandler.sendToTrackingEntityAndSelf(
+                this.getSyncPacket("ability_enabled", Type.BOOLEAN, active),
+                this.getMob()
+        );
+        this.setAbilityUse(active);
     }
 }
