@@ -73,28 +73,27 @@ public class MobHooks {
         if (living instanceof Cockatrice cockatrice)
         {
             CockatriceExtension.get(cockatrice).ifPresent(CockatriceExtension::tick);
-        }
-        if (living instanceof Moa moa && moa.level().isClientSide())
+        } else if (living instanceof Moa moa && moa.level().isClientSide())
         {
             MoaAnimation.get(moa).ifPresent(MoaAnimation::tick);
-        }
-        if (living instanceof Player player)
+        } else if (living instanceof Player player)
         {
             ReduxPlayer.get(player).ifPresent(ReduxPlayer::tick);
-        }
-        if (living instanceof Sentry sentry && sentry.level().isClientSide())
+            if (!player.level().isClientSide()) {
+                VampireAmulet.get(living).ifPresent(VampireAmulet::tick);
+            }
+        } else if (living instanceof Sentry sentry && sentry.level().isClientSide())
         {
             SentryAnimation.get(sentry).ifPresent(SentryAnimation::tick);
-        }
-        if (living instanceof Mimic mimic && mimic.level().isClientSide())
+        } else if (living instanceof Mimic mimic && mimic.level().isClientSide())
         {
             MimicAnimation.get(mimic).ifPresent(MimicAnimation::tick);
         }
+
         if (Redux.aetherGenesisCompat() && living instanceof BattleSentry battleSentry && battleSentry.level().isClientSide())
         {
             BattleSentryAnimation.get(battleSentry).ifPresent(BattleSentryAnimation::tick);
         }
-        VampireAmulet.get(living).ifPresent(VampireAmulet::tick);
     }
 }
 

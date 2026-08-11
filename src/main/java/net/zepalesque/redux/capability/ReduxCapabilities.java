@@ -8,7 +8,6 @@ import com.aetherteam.aether.entity.passive.Moa;
 import com.aetherteam.aether_genesis.entity.monster.BattleSentry;
 import com.aetherteam.nitrogen.capability.CapabilityProvider;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraftforge.common.capabilities.Capability;
@@ -90,6 +89,7 @@ public class ReduxCapabilities {
             }
             if (event.getObject() instanceof Player player) {
                 event.addCapability(Redux.locate("redux_player"), new CapabilityProvider(ReduxCapabilities.REDUX_PLAYER, new ReduxPlayerCapability(player)));
+                event.addCapability(Redux.locate("vampire_amulet"), new CapabilityProvider(ReduxCapabilities.VAMPIRE_AMULET, new VampireAmuletCapability(player)));
             }
             if (event.getObject() instanceof Sentry sentry && sentry.level().isClientSide()) {
                 event.addCapability(Redux.locate("sentry_anim"), new CapabilityProvider(ReduxCapabilities.SENTRY_ANIM, new SentryAnimationCapability(sentry)));
@@ -102,9 +102,6 @@ public class ReduxCapabilities {
             }
             if (event.getObject() instanceof AbstractArrow arrow) {
                 event.addCapability(Redux.locate("subzero_arrow"), new CapabilityProvider(ReduxCapabilities.SUBZERO_ARROW, new SubzeroArrowCapability(arrow)));
-            }
-            if (event.getObject() instanceof LivingEntity entity) {
-                event.addCapability(Redux.locate("vampire_amulet"), new CapabilityProvider(ReduxCapabilities.VAMPIRE_AMULET, new VampireAmuletCapability(entity)));
             }
             if (event.getObject() instanceof Swet entity) {
                 event.addCapability(Redux.locate("swet_mass"), new CapabilityProvider(ReduxCapabilities.SWET_MASS, new SwetMassCapability(entity)));

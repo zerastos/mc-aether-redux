@@ -71,7 +71,9 @@ public class VampireAmuletCapability implements VampireAmulet {
     @Override
     public void tick() {
         if (!this.mob.level().isClientSide()) {
-            this.hasCurio = EquipmentUtil.hasCurio(this.getMob(), ReduxItems.VAMPIRE_AMULET.get());
+            if (this.mob.tickCount % 10 == 0) {
+                this.hasCurio = EquipmentUtil.hasCurio(this.getMob(), ReduxItems.VAMPIRE_AMULET.get());
+            }
             if (!hasCurio && timeWithout < 20) {
                 timeWithout++;
             } else {

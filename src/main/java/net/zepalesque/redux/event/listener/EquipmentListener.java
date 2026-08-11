@@ -129,14 +129,15 @@ public class EquipmentListener {
     @SubscribeEvent
     public static void tickPlayer(LivingEvent.LivingTickEvent event)
     {
-        LivingEntity entity = event.getEntity();
-        if (EquipmentUtil.hasCurio(entity, ReduxItems.GRAND_VICTORY_MEDAL.get())) {
-            // 'i' is a value that decreases as your health goes down, starting at 200 at full health, going down to a minimum of 20 at 1/10 health
-            int i = MathUtil.clampedLerpInt((entity.getHealth() / entity.getMaxHealth()), 20, 200);
-            // Once every i ticks, the player has a 50% chance of getting healed 1 point of health
-            if (i > 0 && entity.tickCount % i == 0 && entity.level().getRandom().nextBoolean())
-            {
-                entity.heal(1);
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (player.getHealth() >= player.getMaxHealth()) return;
+
+        int interval = MathUtil.clampedLerpInt((player.getHealth() / player.getMaxHealth()), 20, 200);
+
+        if (interval > 0 && player.tickCount % interval == 0) {
+            if (EquipmentUtil.hasCurio(player, ReduxItems.GRAND_VICTORY_MEDAL.get()) &&
+                    player.level().getRandom().nextBoolean()) {
+                player.heal(1);
             }
         }
     }
