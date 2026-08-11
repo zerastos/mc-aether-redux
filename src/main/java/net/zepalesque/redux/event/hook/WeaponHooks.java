@@ -41,11 +41,15 @@ public class WeaponHooks {
                             abstractArrow.level().addParticle(ReduxParticleTypes.ICE_SHARD.get(), abstractArrow.getX(), abstractArrow.getY(), abstractArrow.getZ(), 0.0D, 0.0D, 0.0D);
                         }
                     }
+
+                    if (!abstractArrow.level().isClientSide) {
+                        ReduxPacketHandler.sendToTrackingEntity(
+                            new SubzeroArrowHitGroundPacket(abstractArrow.getId()),
+                            abstractArrow
+                        );
+                    }
                 }
             });
-            if (!abstractArrow.level().isClientSide) {
-                ReduxPacketHandler.sendToAll(new SubzeroArrowHitGroundPacket(abstractArrow.getId()));
-            }
         }
     }
 }
