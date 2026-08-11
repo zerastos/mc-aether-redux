@@ -31,7 +31,7 @@ public record UpdateJumpAbilityPacket(UUID playerID) implements BasePacket {
             if (player != null) {
                 ReduxPlayer.get(player).ifPresent((reduxPlayer) -> {
                     List<SlotResult> ringList = EquipmentUtil.getCurios(player, ReduxItems.AIRBOUND_CAPE.get());
-                    reduxPlayer.setSynched(INBTSynchable.Direction.CLIENT, "setMaxAirJumps", ringList != null && ringList.size() > 0 ? 1 : 0);
+                    reduxPlayer.setSynched(INBTSynchable.Direction.PLAYER, "setMaxAirJumps", ringList != null && ringList.size() > 0 ? 1 : 0, player);
                 });
             }
         }

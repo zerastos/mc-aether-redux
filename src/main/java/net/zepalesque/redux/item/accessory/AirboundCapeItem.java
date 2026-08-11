@@ -16,7 +16,7 @@ public class AirboundCapeItem extends AbilityTooltipCapeItem {
         super.onEquip(slotContext, prevStack, stack);
         if (slotContext.entity() instanceof Player player) {
             ReduxPlayer.get(player).ifPresent(reduxPlayer ->
-                    reduxPlayer.setSynched(INBTSynchable.Direction.CLIENT, "setMaxAirJumps", 1)
+                    reduxPlayer.setSynched(INBTSynchable.Direction.PLAYER, "setMaxAirJumps", 1, player)
             );
         }
     }
@@ -26,7 +26,7 @@ public class AirboundCapeItem extends AbilityTooltipCapeItem {
         super.onUnequip(slotContext, newStack, stack);
         if (slotContext.entity() instanceof Player player) {
             ReduxPlayer.get(player).ifPresent((reduxPlayer) -> {
-                reduxPlayer.setSynched(INBTSynchable.Direction.CLIENT, "setMaxAirJumps", 0);
+                reduxPlayer.setSynched(INBTSynchable.Direction.PLAYER, "setMaxAirJumps", 0, player);
             });
         }
     }

@@ -62,7 +62,7 @@ public class EquipmentListener {
         if (event.getEntity() instanceof ServerPlayer player && !player.level().isClientSide())
         {
             ReduxPlayer.get(player).ifPresent((reduxPlayer) -> {
-                    reduxPlayer.setSynched(INBTSynchable.Direction.CLIENT, "setMaxAirJumps", EquipmentUtil.hasCurio(player, ReduxItems.AIRBOUND_CAPE.get()) ? 1 : 0);
+                    reduxPlayer.setSynched(INBTSynchable.Direction.PLAYER, "setMaxAirJumps", EquipmentUtil.hasCurio(player, ReduxItems.AIRBOUND_CAPE.get()) ? 1 : 0, player);
             });
         }
     }
