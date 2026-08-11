@@ -42,7 +42,7 @@ public class ReduxMenus {
             .tabButton(THE_AETHER_TAB_BUTTON);
 
 
-    public static final RegistryObject<Menu> REDUX_MENU = register("aether_redux_menu", ICON, MENU_NAME, ReduxTitleScreen::new, () -> new Menu.Properties().music(ReduxMusic.REDUX_MENU).background(REDUX_BACKGROUND));
+    public static final RegistryObject<Menu> REDUX_MENU = register("aether_redux_menu", ICON, MENU_NAME, ReduxTitleScreen::new, () -> new Menu.Properties().background(REDUX_BACKGROUND));
 
     public static RegistryObject<Menu> register(String id, ResourceLocation icon, Component name, Supplier<TitleScreen> screen, Supplier<Menu.Properties> properties) {
         return MENUS.register(id, () -> new Menu(icon, name, screen.get(), () -> CumulusConfig.CLIENT.active_menu.get().equals("aether_redux:" + id), properties.get()));

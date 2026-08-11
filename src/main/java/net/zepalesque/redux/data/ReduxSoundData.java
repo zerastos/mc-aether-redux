@@ -394,10 +394,6 @@ public class ReduxSoundData extends SoundDefinitionsProvider {
                 definition()
                         .with(sound(Redux.locate("block/aercloud/green_aercloud_wubble")))
                         .subtitle("subtitles.aether_redux.block.aercloud.green_aercloud_wubble"));
-
-        this.add(ReduxSoundEvents.REDUX_MENU,
-                definition()
-                        .with(sound(Redux.locate("music/redux_menu")).stream()));
     }
 
 }
