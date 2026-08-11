@@ -24,10 +24,10 @@ public class AdrenalineModule implements PlayerTickModule {
     }
 
     public void tick() {
+        if (this.cooldown > 0) {
+            this.cooldown--;
+        }
         if (this.player.level().isClientSide()) {
-            if (this.cooldown > 0) {
-                this.cooldown--;
-            }
             if (this.player.hasEffect(ReduxEffects.ADRENALINE_RUSH.get())) {
                 MobEffectInstance i = this.player.getEffect(ReduxEffects.ADRENALINE_RUSH.get());
                 double amount = Math.min(i.getDuration() / 600D, 1D);
