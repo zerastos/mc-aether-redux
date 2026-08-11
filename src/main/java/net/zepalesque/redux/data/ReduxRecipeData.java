@@ -359,12 +359,12 @@ public class ReduxRecipeData extends AetherRecipeProvider implements IConditionB
             .addRecipe(consumer -> ambrosiumEnchanting(consumer, DABlocks.AETHER_MOSS_BLOCK.get(), ReduxBlocks.BLIGHTMOSS_BLOCK.get()))
             .build(output, name("deep_aether_moss_conversions"));
         
-        infusionCharge(output, ReduxItems.VERIDIUM_PICKAXE, ReduxItems.INFUSED_VERIDIUM_PICKAXE);
-        infusionCharge(output, ReduxItems.VERIDIUM_AXE, ReduxItems.INFUSED_VERIDIUM_AXE);
-        infusionCharge(output, ReduxItems.VERIDIUM_SWORD, ReduxItems.INFUSED_VERIDIUM_SWORD);
-        infusionCharge(output, ReduxItems.VERIDIUM_HOE, ReduxItems.INFUSED_VERIDIUM_HOE);
-        infusionCharge(output, ReduxItems.VERIDIUM_SHOVEL, ReduxItems.INFUSED_VERIDIUM_SHOVEL);
-        infusionCharge(output, ReduxItems.VERIDIUM_DART_SHOOTER, ReduxItems.INFUSED_VERIDIUM_DART_SHOOTER);
+        //infusionCharge(output, ReduxItems.VERIDIUM_PICKAXE, ReduxItems.INFUSED_VERIDIUM_PICKAXE);
+        //infusionCharge(output, ReduxItems.VERIDIUM_AXE, ReduxItems.INFUSED_VERIDIUM_AXE);
+        //infusionCharge(output, ReduxItems.VERIDIUM_SWORD, ReduxItems.INFUSED_VERIDIUM_SWORD);
+        //infusionCharge(output, ReduxItems.VERIDIUM_HOE, ReduxItems.INFUSED_VERIDIUM_HOE);
+        //infusionCharge(output, ReduxItems.VERIDIUM_SHOVEL, ReduxItems.INFUSED_VERIDIUM_SHOVEL);
+        //infusionCharge(output, ReduxItems.VERIDIUM_DART_SHOOTER, ReduxItems.INFUSED_VERIDIUM_DART_SHOOTER);
 
         twoByTwoPacker(output, RecipeCategory.BUILDING_BLOCKS, ReduxBlocks.SHELL_SHINGLES.get(), ReduxItems.MYKAPOD_SHELL_CHUNK.get());
         enchantingRecipe(RecipeCategory.BUILDING_BLOCKS, ReduxBlocks.ENCHANTED_SHELL_SHINGLES.get(), ReduxBlocks.SHELL_SHINGLES.get(), 0F, 150);

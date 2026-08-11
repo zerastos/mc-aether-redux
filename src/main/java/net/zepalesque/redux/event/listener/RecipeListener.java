@@ -45,10 +45,13 @@ public class RecipeListener {
             if (event.getEntity() instanceof ServerPlayer sp) BlockStateRecipeTrigger.INSTANCE.trigger(sp, event.getOldBlockState(), event.getNewBlockState(), event.getRecipeType());
         }
     }
+
+    /*
     @SubscribeEvent
     public static void onStackItem(ItemStackedOnOtherEvent event) {
         if (event.getClickAction() == ClickAction.SECONDARY && StackingRecipeHelper.stack(event, stack -> stack.is(AetherItems.AMBROSIUM_SHARD.get()), ReduxRecipeTypes.INFUSION.get())) {
             event.setCanceled(true);
         }
     }
+     */
 }

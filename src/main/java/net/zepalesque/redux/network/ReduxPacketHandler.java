@@ -31,7 +31,8 @@ public class ReduxPacketHandler {
         register(ShootFireballPacket.class, ShootFireballPacket::decode);
         register(SubzeroArrowPacket.class, SubzeroArrowPacket::decode);
         register(SubzeroArrowHitGroundPacket.class, SubzeroArrowHitGroundPacket::decode);
-        register(InfuseItemPacket.class, InfuseItemPacket::decode);
+        //register(InfuseItemPacket.class, InfuseItemPacket::decode);
+        index++; // Packet discriminator intentionally unused. ^
         register(VampireAmuletSyncPacket.class, VampireAmuletSyncPacket::decode);
         register(LoreUnlockPacket.class, LoreUnlockPacket::decode);
         register(SyncAetherGrassesPacket.class, SyncAetherGrassesPacket::decode);
