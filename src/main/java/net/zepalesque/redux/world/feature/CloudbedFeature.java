@@ -42,8 +42,9 @@ public class CloudbedFeature extends Feature<CloudbedFeature.Config> {
         yOffsetNoise.mapAll(visitor);
 
         // This should be placed, once per chunk
-        int chunkX = context.origin().getX() - (context.origin().getX() % 16);
-        int chunkZ = context.origin().getZ() - (context.origin().getZ() % 16);
+        int chunkX = Math.floorDiv(context.origin().getX(), 16) * 16;
+        int chunkZ = Math.floorDiv(context.origin().getZ(), 16) * 16;
+        boolean placedAny = false;
         // Place blocks across the entire chunk
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -65,16 +66,21 @@ public class CloudbedFeature extends Feature<CloudbedFeature.Config> {
                     float blocksDown = Mth.lerp(realCloud, 0F, (float) config.cloudRadius() - 1F) - realOffset;
                     // Floor these values and then place the blocks
                     for (int i = Mth.floor(-blocksDown); i <= Mth.floor(blocksUp); i++) {
-                        int y = Mth.clamp(config.yLevel() + i, context.level().getMinBuildHeight(), context.level().getMaxBuildHeight());
+                        int y = Mth.clamp(
+                            config.yLevel() + i,
+                            context.level().getMinBuildHeight(),
+                            context.level().getMaxBuildHeight() - 1
+                        );
                         BlockPos pos = new BlockPos(xCoord, y, zCoord);
                         if (config.predicate().test(context.level(), pos)) {
                             this.setBlock(context.level(), pos, config.block().getState(context.random(), pos));
+                            placedAny = true;
                         }
                     }
                 }
             }
         }
-        return false;
+        return placedAny;
     }
 
     private static float cosineInterp(float progress, float start, float end) {
