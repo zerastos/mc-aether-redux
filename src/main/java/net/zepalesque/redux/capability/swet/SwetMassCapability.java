@@ -26,6 +26,8 @@ import net.zepalesque.redux.data.resource.ReduxDamageTypes;
 import net.zepalesque.redux.event.hook.SwetHooks;
 import net.zepalesque.redux.misc.ReduxTags;
 
+import java.util.List;
+
 // TODO
 public class SwetMassCapability implements SwetMass {
     protected static final AttributeModifier knockbackResistanceModifier = new AttributeModifier(
@@ -58,13 +60,26 @@ public class SwetMassCapability implements SwetMass {
     }
 
     public void tick() {
-        if (ReduxConfig.COMMON.pl_swet_behavior.get() && !this.getSwet().isDeadOrDying()) {
-            massStuck = 0;
-            this.getSwet().level().getEntities(this.getSwet(), this.getSwet().getBoundingBox().inflate(0.9, 0.9, 0.9)).forEach((entity) -> {
-                AABB box = entity.getBoundingBox();
-                massStuck += box.getXsize() * box.getYsize() * box.getZsize();
-            });
-            this.getSwet().level().getEntities(this.getSwet(), this.getSwet().getBoundingBox()).forEach(this::onEntityCollision);
+        if (!ReduxConfig.COMMON.pl_swet_behavior.get()) return;
+        Swet swet = this.getSwet();
+        Level level = swet.level();
+        if (level.isClientSide()) return;
+        if (swet.isDeadOrDying()) return;
+
+        this.massStuck = 0;
+        AABB collisionBounds = swet.getBoundingBox();
+        List<Entity> nearby = level.getEntities(swet, collisionBounds.inflate(0.9D, 0.9D, 0.9D));
+
+        for (int i = 0; i < nearby.size(); i++) {
+            AABB box = nearby.get(i).getBoundingBox();
+            this.massStuck += box.getXsize() * box.getYsize() * box.getZsize();
+        }
+
+        for (int i = 0; i < nearby.size(); i++) {
+            Entity entity = nearby.get(i);
+            if (entity.getBoundingBox().intersects(collisionBounds)) {
+                this.onEntityCollision(entity);
+            }
         }
     }
 
