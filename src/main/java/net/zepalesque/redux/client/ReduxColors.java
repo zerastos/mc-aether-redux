@@ -33,8 +33,13 @@ import java.util.function.Consumer;
 public class ReduxColors {
 
     public static Map<Biome, Integer> AETHER_GRASS_COLORS = new HashMap<>();
-    public static ColorResolver AETHER_GRASS_RESOLVER = (biome, x, z) -> AETHER_GRASS_COLORS.getOrDefault(biome, ReduxBiomes.AETHER_GRASS_COLOR);
-
+    public static ColorResolver AETHER_GRASS_RESOLVER =
+            (biome, x, z) -> {
+                Integer color = AETHER_GRASS_COLORS.get(biome);
+                return color != null
+                        ? color
+                        : ReduxBiomes.AETHER_GRASS_COLOR;
+            };
 
     public static void blockColors(RegisterColorHandlersEvent.Block event) {
         Redux.LOGGER.debug("Beginning block color registration for the Aether: Redux");
@@ -187,14 +192,25 @@ public class ReduxColors {
     }
 
     public static int getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int index, int indexGoal) {
-        return index == indexGoal ? level != null && pos != null ?
-            level.getBlockState(pos.below()).is(ReduxBlocks.BLIGHTMOSS_BLOCK.get())
-                ? ReduxBiomes.BLEAKMOSS_GRASS_COLOR
-                : level.getBlockState(pos.below()).is(ReduxBlocks.BLIGHTED_AETHER_GRASS_BLOCK.get())
-                    ? ReduxBiomes.BLIGHT_GRASS_COLOR
-                    : getAverageColor(level, pos, AETHER_GRASS_RESOLVER)
-            : ReduxBiomes.AETHER_GRASS_COLOR
-            : 0xFFFFFF;
+        if (index != indexGoal) {
+            return 0xFFFFFF;
+        }
+
+        if (level == null || pos == null) {
+            return ReduxBiomes.AETHER_GRASS_COLOR;
+        }
+
+        BlockState belowState = level.getBlockState(pos.below());
+
+        if (belowState.is(ReduxBlocks.BLIGHTMOSS_BLOCK.get())) {
+            return ReduxBiomes.BLEAKMOSS_GRASS_COLOR;
+        }
+
+        if (belowState.is(ReduxBlocks.BLIGHTED_AETHER_GRASS_BLOCK.get())) {
+            return ReduxBiomes.BLIGHT_GRASS_COLOR;
+        }
+
+        return getAverageColor(level, pos, AETHER_GRASS_RESOLVER);
     }
 
     private static int getAverageColor(BlockAndTintGetter level, BlockPos blockPos, ColorResolver colorResolver) {
