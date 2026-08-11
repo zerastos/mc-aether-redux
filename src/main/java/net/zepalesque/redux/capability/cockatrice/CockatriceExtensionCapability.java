@@ -8,6 +8,7 @@ import com.aetherteam.nitrogen.network.BasePacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -35,6 +36,8 @@ public class CockatriceExtensionCapability implements CockatriceExtension {
     private int refreshTime = 0;
     // Server-Only
     private boolean wasMelee = false;
+    // Server-Only
+    private @Nullable Entity lastTarget;
     // Client-Only
     private byte targetAnim;
     // Client-Only
@@ -140,27 +143,34 @@ public class CockatriceExtensionCapability implements CockatriceExtension {
 
                 // Server-side checks
                 int refreshReset = 200;
-                if (this.refreshTime <= 0)
-                {
+                LivingEntity target = this.getCockatrice().getTarget();
+                if (this.refreshTime <= 0 || target != this.lastTarget) {
                     this.refreshNearby();
                     this.refreshTime = refreshReset;
+                    this.lastTarget = target;
                 } else {
                     this.refreshTime--;
                 }
-                 if (!this.wasMelee && this.cockatrice.getTarget() != null && this.refreshTime < refreshReset) {
+                if (!this.wasMelee && this.cockatrice.getTarget() != null && this.refreshTime < refreshReset) {
                     this.refreshNearby();
                 }
 
-                boolean hasInebriation = this.getCockatrice().getTarget() != null && (this.getCockatrice().getTarget().hasEffect(AetherEffects.INEBRIATION.get()) || EquipmentUtil.hasCurio(this.cockatrice.getTarget(), ReduxItems.FEATHER_OF_WARDING.get()));
+                boolean hasInebriation = target != null && (target.hasEffect(AetherEffects.INEBRIATION.get()) || EquipmentUtil.hasCurio(target, ReduxItems.FEATHER_OF_WARDING.get()));
                 boolean inGroup = this.nearbyCount() >= 3;
-                boolean shooting = (!hasInebriation && this.getCockatrice().getTarget() != null && !inGroup) || !ReduxConfig.COMMON.improved_cockatrice_behavior.get();
-                if (!shooting && this.cockatrice.getTarget() != null) {
+                boolean shooting = (!hasInebriation && target != null && !inGroup) || !ReduxConfig.COMMON.improved_cockatrice_behavior.get();
+                if (!shooting && target != null) {
                     this.wasMelee = true;
-                } else if (this.cockatrice.getTarget() == null) {
+                } else if (target == null) {
                     this.wasMelee = false;
                 }
-                this.setSynched(Direction.CLIENT, "shooting", shooting && !wasMelee);
-
+                boolean newShooting = shooting && !this.wasMelee;
+                if (newShooting != this.isShooting()) {
+                    ReduxPacketHandler.sendToTrackingEntity(
+                        this.getSyncPacket("shooting", Type.BOOLEAN, newShooting),
+                        this.getCockatrice()
+                    );
+                }
+                this.setShooting(newShooting);
             }
         }
     }

@@ -4,7 +4,9 @@ package net.zepalesque.redux.event.listener;
 import com.aetherteam.aether.entity.monster.Cockatrice;
 import com.aetherteam.aether.entity.monster.Swet;
 import com.aetherteam.aether.item.EquipmentUtil;
+import com.aetherteam.nitrogen.capability.INBTSynchable;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,9 +17,11 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.zepalesque.redux.Redux;
+import net.zepalesque.redux.capability.cockatrice.CockatriceExtension;
 import net.zepalesque.redux.capability.living.VampireAmulet;
 import net.zepalesque.redux.capability.player.ReduxPlayer;
 import net.zepalesque.redux.config.ReduxConfig;
@@ -76,6 +80,15 @@ public class MobListener {
             b.ifPresent(biomeResourceKey -> ReduxPlayer.get(player).ifPresent(reduxPlayer -> reduxPlayer.getLoreModule().incrementBiome(biomeResourceKey.location())));
         }
 
+    }
+
+    @SubscribeEvent
+    public static void startTracking(PlayerEvent.StartTracking event) {
+        if (event.getEntity() instanceof ServerPlayer player && event.getTarget() instanceof Cockatrice cockatrice) {
+            CockatriceExtension.get(cockatrice).ifPresent(extension ->
+                    extension.setSynched(INBTSynchable.Direction.PLAYER, "shooting", extension.isShooting(), player)
+            );
+        }
     }
 
     @SubscribeEvent

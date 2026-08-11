@@ -4,6 +4,7 @@ import com.aetherteam.nitrogen.network.BasePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -49,6 +50,20 @@ public class ReduxPacketHandler {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> {
             return player;
         }), message);
+    }
+
+    public static <MSG> void sendToTrackingEntity(MSG message, Entity entity) {
+        INSTANCE.send(
+            PacketDistributor.TRACKING_ENTITY.with(() -> entity),
+            message
+        );
+    }
+
+    public static <MSG> void sendToTrackingEntityAndSelf(MSG message, Entity entity) {
+        INSTANCE.send(
+            PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+            message
+        );
     }
 
     public static <MSG> void sendToNear(MSG message, double x, double y, double z, double radius, ResourceKey<Level> dimension) {
