@@ -27,6 +27,7 @@ import net.zepalesque.redux.util.math.MathUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 
 public class Ember extends Projectile {
@@ -76,12 +77,15 @@ public class Ember extends Projectile {
          return this.cachedHits;
       } else if (this.hitUUIDs != null && !this.hitUUIDs.isEmpty() && this.level() instanceof ServerLevel serverLevel) {
          ArrayList<Entity> collection = new ArrayList<>();
-         for (UUID id : this.hitUUIDs) {
-            Entity e = serverLevel.getEntity(id);
-            if (e != null && !e.isRemoved()) {
-               collection.add(e);
+         Iterator<UUID> iterator = this.hitUUIDs.iterator();
+         while (iterator.hasNext()) {
+            UUID id = iterator.next();
+            Entity entity = serverLevel.getEntity(id);
+
+            if (entity != null && !entity.isRemoved()) {
+               collection.add(entity);
             } else {
-               this.hitUUIDs.remove(id);
+               iterator.remove();
             }
          }
          this.cachedHits = collection;
@@ -97,6 +101,11 @@ public class Ember extends Projectile {
    
    protected boolean hasHit(Entity entity) {
       return this.hitUUIDs.contains(entity.getUUID());
+   }
+
+   @Override
+   protected boolean canHitEntity(Entity entity) {
+      return super.canHitEntity(entity) && !this.hasHit(entity);
    }
 
 
@@ -187,6 +196,7 @@ public class Ember extends Projectile {
    protected void onHitEntity(EntityHitResult result) {
       super.onHitEntity(result);
       if (result.getEntity() instanceof LivingEntity livingentity && !this.ownedBy(livingentity) && !this.originatedFrom(livingentity) && !this.hasHit(livingentity) && !(livingentity instanceof BossMob<?>)) {
+         this.hit(livingentity);
          livingentity.hurt(ReduxDamageTypes.entitySource(this.level(), ReduxDamageTypes.EMBER, this.getOwner()), 1.0F);
       }
 
