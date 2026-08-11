@@ -45,12 +45,12 @@ public class MobHooks {
         if (toRemove[0] != null) {
             cockatrice.targetSelector.getAvailableGoals().removeIf((wrappedGoal -> wrappedGoal == toRemove[0]));
             cockatrice.targetSelector.addGoal(1, new HurtByOtherTypeTargetGoal(cockatrice));
-        }            cockatrice.goalSelector.addGoal(1, new CockatriceMeleeAttackGoal(cockatrice, 1.5, false));
+        }
 
         cockatrice.goalSelector.getAvailableGoals().forEach((goal) -> {
             if (goal.getGoal().getClass().equals(RangedAttackGoal.class) && goal.getPriority() == 2) {
                 removeRanged[0] = goal;}});
-        if (toRemove[0] != null) {
+        if (removeRanged[0] != null) {
             cockatrice.goalSelector.getAvailableGoals().removeIf((wrappedGoal -> wrappedGoal == removeRanged[0]));
             cockatrice.goalSelector.addGoal(2, new CockatriceRangedStrafeGoal(cockatrice, 1.0, 60, 10.0F));
         }
