@@ -212,7 +212,6 @@ public class Redux {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        ReduxAdvancementTriggers.init();
         DistExecutor.unsafeRunForDist(() -> () -> {
             ReduxBlocks.registerWoodTypes(true);
             return true;
@@ -220,9 +219,10 @@ public class Redux {
             ReduxBlocks.registerWoodTypes(false);
             return true;
         });
-        ReduxPlacementModifiers.init();
         ReduxPacketHandler.register();
         event.enqueueWork(() -> {
+            ReduxAdvancementTriggers.init();
+            ReduxPlacementModifiers.init();
             if (ReduxConfig.COMMON.first_startup_aeroblender_setup.get()) {
                 AeroBlenderConfig.COMMON.vanillaAetherRegionWeight.set(0);
                 AeroBlenderConfig.COMMON.vanillaAetherRegionWeight.save();
