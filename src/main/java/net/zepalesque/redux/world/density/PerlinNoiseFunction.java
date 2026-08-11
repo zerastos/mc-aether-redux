@@ -11,8 +11,8 @@ import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import net.zepalesque.redux.mixin.common.world.PerlinNoiseAccessor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -28,8 +28,8 @@ public class PerlinNoiseFunction implements DensityFunction {
                     .apply(p_208798_, PerlinNoiseFunction::new)));
 
     @Nullable
-    public PerlinNoise noise = null;
-    private static final Map<Long, PerlinNoiseVisitor> VISITORS = new HashMap<>();
+    public  volatile PerlinNoise noise = null;
+    private static final ConcurrentMap<Long, PerlinNoiseVisitor> VISITORS = new ConcurrentHashMap<>();
     // This is used before the seed is initialized, for methods such as DensityFunction#maxValue
     private final PerlinNoise fakeNoise;
     public final NormalNoise.NoiseParameters params;
@@ -79,8 +79,10 @@ public class PerlinNoiseFunction implements DensityFunction {
         }
     }
 
-    public PerlinNoiseFunction initialize(Function<Long, RandomSource> rand) {
-        this.noise = PerlinNoise.create(rand.apply(this.seed), this.params.firstOctave(), this.params.amplitudes());
+    public synchronized PerlinNoiseFunction initialize(Function<Long, RandomSource> rand) {
+        if (this.noise == null) {
+            this.noise = PerlinNoise.create(rand.apply(this.seed), this.params.firstOctave(), this.params.amplitudes());
+        }
         return this;
     }
 
