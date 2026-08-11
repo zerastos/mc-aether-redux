@@ -40,7 +40,7 @@ public class ParticleLeavesMixin {
 
                 ParticleOptions newParticle = getReplacementParticle(this.particle.get());
                 if (newParticle == null) {
-                    throw new NullPointerException("ParticleOptions cannot be null!");
+                    return;
                 }
 
                 if (random.nextInt(15) == 0) {
@@ -62,7 +62,7 @@ public class ParticleLeavesMixin {
      */
     @WrapWithCondition(method = "animateTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
     public boolean redirectParticleOverride(Level instance, ParticleOptions pParticleData, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, @Share("replace") LocalBooleanRef shouldReplaceParticle) {
-        return !shouldReplaceParticle.get();
+        return !shouldReplaceParticle.get() || getReplacementParticle(this.particle.get()) == null;
     }
 
     /**
