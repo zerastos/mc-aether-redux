@@ -35,7 +35,7 @@ public class ShootFireballListener {
             ReduxPlayer.get(player).ifPresent((reduxPlayer) ->
             {
                 if (ReduxKeys.SHOOT_FIREBALL.isDown() && !prevFireballBindState && !player.isInWater() && !player.isSpectator()) {
-                    ReduxPacketHandler.sendToServer(new ShootFireballPacket(player.getUUID()));
+                    ReduxPacketHandler.sendToServer(new ShootFireballPacket());
                     reduxPlayer.fireballSetup();
                 }
             });
