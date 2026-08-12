@@ -112,6 +112,7 @@ public class EquipmentListener {
                 int ringcount = EquipmentUtil.getCurios(player, ReduxItems.SENTRY_RING.get()).size();
                 RandomSource source = target.level().getRandom();
                 int embers = event.getAmount() < 1.5 || player.getMainHandItem().isEmpty() ? 0 : Mth.ceil(((event.getAmount() * 0.5D) + 1D) * (ringcount == 2 ? 1.5D : 1D));
+                if (embers > 16) embers = 16;
                 for (int i = 1; i <= embers; i++) {
                     float rotation = Mth.wrapDegrees(source.nextInt(360));
                     Ember ember = new Ember(target.level(), player, target);
