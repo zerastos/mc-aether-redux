@@ -37,7 +37,7 @@ public class DoubleJumpListener {
             {
                 if (mc.options.keyJump.isDown() && !prevJumpBindState && !player.isInWater() && reduxPlayer.ticksInAir() > 2 && !player.isCreative() && !player.isSpectator() && !player.isPassenger())
                 {
-                    ReduxPacketHandler.sendToServer(new DoubleJumpPacket(player.getUUID()));
+                    ReduxPacketHandler.sendToServer(new DoubleJumpPacket());
                     reduxPlayer.doubleJump();
                 }
             });

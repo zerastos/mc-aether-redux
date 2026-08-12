@@ -8,36 +8,21 @@ import net.minecraft.world.entity.player.Player;
 import net.zepalesque.redux.advancement.trigger.DoubleJumpTrigger;
 import net.zepalesque.redux.capability.player.ReduxPlayer;
 
-import java.util.UUID;
+public record DoubleJumpPacket() implements BasePacket {
 
-public record DoubleJumpPacket(UUID playerID) implements BasePacket {
-
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeUUID(this.playerID);
-    }
+    public void encode(FriendlyByteBuf buf) {}
 
     public static DoubleJumpPacket decode(FriendlyByteBuf buf) {
-        UUID player = buf.readUUID();
-        return new DoubleJumpPacket(player);
+        return new DoubleJumpPacket();
     }
 
-    public void execute(Player playerEntity) {
+    public void execute(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        if (playerEntity != null && playerEntity.getServer() != null) {
-            Player player = playerEntity.level().getPlayerByUUID(this.playerID());
-            if (player != null) {
-                ReduxPlayer.get(player).ifPresent(ReduxPlayer::doubleJump);
-                if (player instanceof ServerPlayer sp)
-                {
-                    DoubleJumpTrigger.INSTANCE.trigger(sp);
-                }
+        ReduxPlayer.get(serverPlayer).ifPresent(reduxPlayer -> {
+            if (reduxPlayer.doubleJump()) {
+                DoubleJumpTrigger.INSTANCE.trigger(serverPlayer);
             }
-        }
-
+        });
     }
-
-    public UUID playerID() {
-        return this.playerID;
-    }
-
 }
