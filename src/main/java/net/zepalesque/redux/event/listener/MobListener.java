@@ -11,6 +11,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -21,6 +22,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.zepalesque.redux.Redux;
+import net.zepalesque.redux.capability.arrow.SubzeroArrow;
 import net.zepalesque.redux.capability.cockatrice.CockatriceExtension;
 import net.zepalesque.redux.capability.living.VampireAmulet;
 import net.zepalesque.redux.capability.player.ReduxPlayer;
@@ -31,6 +33,8 @@ import net.zepalesque.redux.event.hook.MobHooks;
 import net.zepalesque.redux.event.hook.SwetHooks;
 import net.zepalesque.redux.item.ReduxItems;
 import net.zepalesque.redux.misc.ReduxTags;
+import net.zepalesque.redux.network.ReduxPacketHandler;
+import net.zepalesque.redux.network.packet.SubzeroArrowPacket;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -62,10 +66,18 @@ public class MobListener {
 
     @SubscribeEvent
     public static void startTracking(PlayerEvent.StartTracking event) {
-        if (event.getEntity() instanceof ServerPlayer player && event.getTarget() instanceof Cockatrice cockatrice) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        if (event.getTarget() instanceof Cockatrice cockatrice) {
             CockatriceExtension.get(cockatrice).ifPresent(extension ->
                     extension.setSynched(INBTSynchable.Direction.PLAYER, "shooting", extension.isShooting(), player)
             );
+        } else if (event.getTarget() instanceof AbstractArrow arrow) {
+            SubzeroArrow.get(arrow).ifPresent(subzeroArrow -> {
+                if (subzeroArrow.isSubzeroArrow()) {
+                    ReduxPacketHandler.sendToPlayer(new SubzeroArrowPacket(arrow.getId(), true), player);
+                }
+            });
         }
     }
 

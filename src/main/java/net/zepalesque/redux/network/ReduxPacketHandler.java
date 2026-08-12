@@ -28,14 +28,16 @@ public class ReduxPacketHandler {
         register(ReduxCockatriceSyncPacket.class, ReduxCockatriceSyncPacket::decode);
         register(DoubleJumpPacket.class, DoubleJumpPacket::decode);
         register(ReduxPlayerSyncPacket.class, ReduxPlayerSyncPacket::decode);
-        register(UpdateJumpAbilityPacket.class, UpdateJumpAbilityPacket::decode);
+        //register(UpdateJumpAbilityPacket.class, UpdateJumpAbilityPacket::decode);
+        index++; // Packet discriminator intentionally unused. ^
         register(ShootFireballPacket.class, ShootFireballPacket::decode);
         register(SubzeroArrowPacket.class, SubzeroArrowPacket::decode);
         //register(SubzeroArrowHitGroundPacket.class, SubzeroArrowHitGroundPacket::decode);
         index++; // Packet discriminator intentionally unused. ^
         //register(InfuseItemPacket.class, InfuseItemPacket::decode);
         index++; // Packet discriminator intentionally unused. ^
-        register(VampireAmuletSyncPacket.class, VampireAmuletSyncPacket::decode);
+        //register(VampireAmuletSyncPacket.class, VampireAmuletSyncPacket::decode);
+        index++; // Packet discriminator intentionally unused. ^
         //register(LoreUnlockPacket.class, LoreUnlockPacket::decode);
         index++; // Packet discriminator intentionally unused. ^
         register(SyncAetherGrassesPacket.class, SyncAetherGrassesPacket::decode);

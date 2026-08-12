@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.zepalesque.redux.item.ReduxItems;
 import net.zepalesque.redux.network.ReduxPacketHandler;
-import net.zepalesque.redux.network.packet.VampireAmuletSyncPacket;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.Map;
@@ -24,18 +23,8 @@ public class VampireAmuletCapability implements VampireAmulet {
     private int timer = 24000;
     private int timeWithout = 0;
 
-
-    private final Map<String, Triple<Type, Consumer<Object>, Supplier<Object>>> synchableFunctions = Map.ofEntries(
-            Map.entry("ability_enabled", Triple.of(Type.BOOLEAN, (object) -> this.setAbilityUse((Boolean) object), this::canUseAbility))
-    );
-
     public VampireAmuletCapability(LivingEntity mob) {
         this.mob = mob;
-    }
-
-    @Override
-    public Map<String, Triple<Type, Consumer<Object>, Supplier<Object>>> getSynchableFunctions() {
-        return this.synchableFunctions;
     }
 
     @Override
@@ -86,23 +75,12 @@ public class VampireAmuletCapability implements VampireAmulet {
                 this.timer--;
             }
             if (this.hasCurio && this.timer <= 0 && !this.canUseAbility()) {
-                this.syncAbilityUse(true);
+                this.setAbilityUse(true);
             }
             if ((!this.hasCurio || this.timer > 0) && this.canUseAbility()) {
-                this.syncAbilityUse(false);
+                this.setAbilityUse(false);
             }
         }
-    }
-
-    @Override
-    public BasePacket getSyncPacket(String s, Type type, Object o) {
-        return new VampireAmuletSyncPacket(this.getMob().getId(), s, type, o);
-    }
-
-
-    @Override
-    public SimpleChannel getPacketChannel() {
-        return ReduxPacketHandler.INSTANCE;
     }
 
     @Override
@@ -119,13 +97,5 @@ public class VampireAmuletCapability implements VampireAmulet {
         this.active = nbt.getBoolean("active");
         this.timer = nbt.getInt("timer");
         this.hasCurio = nbt.getBoolean("has_curio");
-    }
-
-    private void syncAbilityUse(boolean active) {
-        ReduxPacketHandler.sendToTrackingEntityAndSelf(
-                this.getSyncPacket("ability_enabled", Type.BOOLEAN, active),
-                this.getMob()
-        );
-        this.setAbilityUse(active);
     }
 }
