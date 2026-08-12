@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public class ReduxPacketHandler {
 
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             Redux.locate("main"),
             () -> PROTOCOL_VERSION,
