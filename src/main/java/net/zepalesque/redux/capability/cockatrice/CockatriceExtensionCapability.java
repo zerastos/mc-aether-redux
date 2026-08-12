@@ -151,9 +151,6 @@ public class CockatriceExtensionCapability implements CockatriceExtension {
                 } else {
                     this.refreshTime--;
                 }
-                if (!this.wasMelee && this.cockatrice.getTarget() != null && this.refreshTime < refreshReset) {
-                    this.refreshNearby();
-                }
 
                 boolean hasInebriation = target != null && (target.hasEffect(AetherEffects.INEBRIATION.get()) || EquipmentUtil.hasCurio(target, ReduxItems.FEATHER_OF_WARDING.get()));
                 boolean inGroup = this.nearbyCount() >= 3;

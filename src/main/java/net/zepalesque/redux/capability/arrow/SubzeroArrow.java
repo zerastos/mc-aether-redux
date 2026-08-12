@@ -1,12 +1,12 @@
 package net.zepalesque.redux.capability.arrow;
 
-import com.aetherteam.nitrogen.capability.INBTSynchable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.zepalesque.redux.capability.ReduxCapabilities;
 
-public interface SubzeroArrow extends INBTSynchable<CompoundTag> {
+public interface SubzeroArrow extends INBTSerializable<CompoundTag> {
     AbstractArrow getArrow();
 
     static LazyOptional<SubzeroArrow> get(AbstractArrow arrow) {
@@ -18,14 +18,4 @@ public interface SubzeroArrow extends INBTSynchable<CompoundTag> {
 
     void setSlownessTime(int time);
     int getSlownessTime();
-
-    boolean hitGround();
-    void setHitGround(boolean hitGround);
-
-    void tick();
-
-    int getHitGroundTimer();
-    void setHitGroundTimer(int time);
-
-
 }

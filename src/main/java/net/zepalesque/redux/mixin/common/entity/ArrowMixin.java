@@ -19,21 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractArrow.class)
 public class ArrowMixin
 {
-    @Shadow
-    protected boolean inGround;
-
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void tick(CallbackInfo ci) {
-        AbstractArrow arrow = (AbstractArrow) (Object) this;
-        SubzeroArrow.get(arrow).ifPresent(subzeroArrow -> {
-            if (subzeroArrow.isSubzeroArrow()) {
-                subzeroArrow.tick();
-                if (!arrow.level().isClientSide) {
-                    ReduxPacketHandler.sendToAll(new SubzeroArrowPacket(arrow.getId(), true));
-                }
-            }
-        });
-    }
 
     // TODO: there may be a better way to do this, I can't remember how though but I feel like I vaguely remember a mixin type to replace a parameter or something
     @WrapWithCondition(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", ordinal = 0))
