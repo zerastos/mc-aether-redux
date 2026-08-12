@@ -13,7 +13,7 @@ public class VeridiumDart extends AbstractDart {
     }
 
     public VeridiumDart(Level level) {
-        super(ReduxEntityTypes.INFUSED_VERIDIUM_DART.get(), level, ReduxItems.VERIDIUM_DART);
+        super(ReduxEntityTypes.VERIDIUM_DART.get(), level, ReduxItems.VERIDIUM_DART);
         this.setBaseDamage(2.0);
     }
 }
